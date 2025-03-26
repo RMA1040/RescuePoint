@@ -1,0 +1,28 @@
+{
+  "name": "rescuepoint",
+  "version": "1.0.0",
+  "description": "RescuePoint. webapp helpt klanten in nood om snel hun locatie te delen met VAB, zonder dat ze een account nodig hebben.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RMA1040/RescuePoint.git"
+  },
+  "author": "RMA",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RMA1040/RescuePoint/issues"
+  },
+  "homepage": "https://github.com/RMA1040/RescuePoint#readme",
+  "devDependencies": {
+    "@types/node": "^22.13.13",
+    "@types/readline-sync": "^1.4.8",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "readline-sync": "^1.4.10"
+  }
+}
