@@ -1,13 +1,19 @@
 <%- include("partials/header")%>
-<body>
-    <h1>Rescue Point</h1>
-    <p>RescuePoint is een webapp waarmee klanten die autopech hebben snel en eenvoudig hun locatie kunnen delen met pechverhelpingsdiensten.<br>Geen app-download nodig – gewoon openen, locatie delen, en hulp is onderweg.</p>
-    <form action="">
-        <label for="name">Name:</label>
-        <input name="name" type="text" required>
-        <label for="licenseplate">licenseplate:</label>
-        <input name="licenseplate" type="text" required>
-        <button type="submit">Share location</button>
-    </form>
-</body>
+    <main>
+        <h1>Rescue Point</h1>
+        <section>
+            <p>RescuePoint is een webapp waarmee klanten die autopech hebben snel en eenvoudig hun locatie kunnen delen met pechverhelpingsdiensten.<br>Geen app-download nodig – gewoon openen, locatie delen, en hulp is onderweg.</p>
+            <form id="locationForm" action="request" method="post">
+                <label for="name">Name:</label>
+                <input name="name" type="text" required><br>
+                <label for="licensePlate">licenseplate:</label>
+                <input name="licensePlate" type="text" required><br>
+                <!-- Verborgen velden voor locatie -->
+                <input type="hidden" id="latitude" name="latitude">
+                <input type="hidden" id="longitude" name="longitude">
+                <button id="locationButton" type="submit">Share location</button>
+            </form>
+        </section>
+        <script src="/js/location.js"></script>
+    </main>
 <%- include("partials/footer")%>

@@ -1,17 +1,26 @@
-import { Readline } from "readline/promises";
-import * as readline from 'readline-sync';
 import express from "express";
 import ejs from "ejs";
+import {Client} from "./interface";
 
 const app = express();
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
+app.use(express.urlencoded({ extended: true }));
 app.set("port", 3000);
 
 // ROUTE HANDLING
 app.get("/", (req,res) =>{
     res.render("index");
+});
+
+app.post("/request", (req, res) => {
+    const { name, licensePlate, latitude, longitude } = req.body;
+    console.log(`Naam: ${name}, Nummerplaat: ${licensePlate}`);
+    console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+
+    // Render de bevestigingspagina met de ontvangen gegevens
+    res.render("confirmation", { name, licensePlate, latitude, longitude });
 });
 
 app.use((req, res) => {
@@ -22,15 +31,3 @@ app.use((req, res) => {
 );
 
 app.listen(app.get("port"), ()=>console.log( "[server] http://localhost:" + app.get("port")));
-
-
-
-
-/*
-let ClientName: string;
-let LicensePlate: string;
-
-ClientName = readline.question("Geef uw naam in: ");
-LicensePlate = readline.question("Geef uz nummerplaat in: ");
-console.log(`Klant: ${ClientName} met nummerplaat ${LicensePlate}`);
-*/

@@ -1,0 +1,59 @@
+<%- include("partials/header") %>
+<main>
+    <h1>Confirmation</h1>
+    <p>Thank you for your request, <strong><%= name %></strong>!</p>
+    <p>Your licenseplate is: <strong><%= licensePlate %></strong></p>
+    <p>Your location has been registered as followed:</p>
+    <ul>
+        <li>Latitude: <%= latitude %></li>
+        <li>Longitude: <%= longitude %></li>
+    </ul>
+    <!-- Map container -->
+    <div id="map" style="height: 400px; width: 70%;"></div>
+
+    <div id="address" style="margin-top: 20px;">
+        <p><strong>Adres:</strong> <span id="address-text">Laden...</span></p>
+    </div>
+
+    <script>
+        // Initialiseer de Leaflet kaart
+        var map = L.map('map').setView([<%= latitude %>, <%= longitude %>], 12);
+
+        // Voeg OpenStreetMap tiles toe aan de kaart
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Voeg een marker toe op de klantlocatie
+        var marker = L.marker([<%= latitude %>, <%= longitude %>]).addTo(map)
+            .bindPopup("Klantlocatie")
+            .openPopup();
+
+        // Functie om geocoding aanroep te doen en adres te krijgen
+        function getAddress(lat, lon) {
+            // Nominatim API URL voor geocoding
+            var apiUrl = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&addressdetails=1`;
+
+            // Gebruik fetch om data van de API op te halen
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    // Verkrijg het adres
+                    var address = data.address;
+                    var formattedAddress = `${address.road}, ${address.city}, ${address.postcode}`;
+
+                    // Zet het adres in de pagina
+                    document.getElementById('address-text').textContent = formattedAddress;
+                })
+                .catch(error => {
+                    console.error("Fout bij het ophalen van adres:", error);
+                    document.getElementById('address-text').textContent = "Adres kon niet worden opgehaald.";
+                });
+        }
+
+        // Haal het adres op met de opgegeven latitude en longitude
+        getAddress(<%= latitude %>, <%= longitude %>);
+    </script>
+    <a href="/">Back to home</a>
+</main>
+<%- include("partials/footer") %>
