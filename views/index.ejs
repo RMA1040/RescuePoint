@@ -1,11 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rescue Point</title>
-</head>
+<%- include("partials/header")%>
 <body>
     <h1>Rescue Point</h1>
+    <p>RescuePoint is een webapp waarmee klanten die autopech hebben snel en eenvoudig hun locatie kunnen delen met pechverhelpingsdiensten.<br>Geen app-download nodig – gewoon openen, locatie delen, en hulp is onderweg.</p>
+    <form action="">
+        <label for="name">Name:</label>
+        <input name="name" type="text" required>
+        <label for="licenseplate">licenseplate:</label>
+        <input name="licenseplate" type="text" required>
+        <button type="submit">Share location</button>
+    </form>
 </body>
-</html>
+<%- include("partials/footer")%>
