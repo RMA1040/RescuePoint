@@ -1,0 +1,16 @@
+<%- include("partials/header") %>
+
+<main>
+    <h1>Admin Login</h1>
+    <form action="/login" method="POST">
+        <label for="email">E-mailadres:</label>
+        <input type="text" name="email" id="email" required>
+
+        <label for="password">Wachtwoord:</label>
+        <input type="password" name="password" id="password" required>
+
+        <button type="submit">Inloggen</button>
+    </form>
+</main>
+
+<%- include("partials/footer") %>

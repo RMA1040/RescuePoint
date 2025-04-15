@@ -14,6 +14,18 @@ app.get("/", (req,res) =>{
     res.render("index");
 });
 
+app.get("/login", (req,res) =>{
+    res.render("login");
+});
+
+app.get("/privacy", (req,res) =>{
+    res.render("privacy");
+});
+
+app.get("/contact", (req,res)=>{
+    res.render("contact");
+});
+
 app.post("/request", (req, res) => {
     const { name, licensePlate, latitude, longitude } = req.body;
     console.log(`Naam: ${name}, Nummerplaat: ${licensePlate}`);
