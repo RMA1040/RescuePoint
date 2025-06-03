@@ -1,13 +1,12 @@
+import dotenv from "dotenv";
+dotenv.config(); 
 import express from "express";
 import ejs from "ejs";
-import dotenv from "dotenv";
 import { connect, client, createInitialUser } from "./database";
 import { Client } from "./interface";
 import session from "./session";
 import { secureMiddleware } from "./secureMiddleware";
 import { loginRouter } from "./loginRouter";
-
-dotenv.config();
 
 const app = express();
 app.set("view engine", "ejs");
