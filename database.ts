@@ -4,8 +4,6 @@ import { User } from "./interface";
 import bcrypt from "bcrypt";
 dotenv.config();
 
-console.log("Using MONGODB_URI:", process.env.MONGODB_URI);
-
 // Haal de URI uit de omgeving, fallback naar lokale MongoDB
 export const MONGODB_URI = process.env.MONGODB_URI ?? "mongodb://localhost:27017";
 
