@@ -1,6 +1,7 @@
 export interface Client{
     name:string;
     licensePlate: string;
-    latitude: number;
-    longitude: number;
+    latitude?: string;
+    longitude?: string;
+    time: Date;
 };

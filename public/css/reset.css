@@ -1,0 +1,15 @@
+/* Box sizing and margin/padding reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Base HTML and body styling */
+html, body {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    background-color: #f1f1f1;
+    color: #333;
+    line-height: 1.6;
+}

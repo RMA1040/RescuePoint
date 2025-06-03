@@ -1,8 +1,10 @@
 import express from "express";
 import ejs from "ejs";
 import {Client} from "./interface";
+import { request } from "http";
 
 const app = express();
+const helpRequest: Client[] = []; // lege array om alle aanvragen type Client in op te slaan 
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
@@ -26,13 +28,24 @@ app.get("/contact", (req,res)=>{
     res.render("contact");
 });
 
-app.post("/request", (req, res) => {
-    const { name, licensePlate, latitude, longitude } = req.body;
-    console.log(`Naam: ${name}, Nummerplaat: ${licensePlate}`);
-    console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+app.get("/dashboard", (req, res) => {
+  res.render("dashboard", { request: helpRequest });
+});
 
-    // Render de bevestigingspagina met de ontvangen gegevens
-    res.render("confirmation", { name, licensePlate, latitude, longitude });
+app.post("/request", (req, res) => {
+  const { name, licensePlate, latitude, longitude } = req.body;
+
+  const request: Client = {
+    name,
+    licensePlate,
+    latitude,
+    longitude,
+    time: new Date()
+  };
+
+  helpRequest.push(request); // voegt "request" objecten toe aan het einde van de array helpRequest.
+
+  res.render("confirmation", { name, licensePlate, latitude, longitude });
 });
 
 app.use((req, res) => {

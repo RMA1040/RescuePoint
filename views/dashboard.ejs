@@ -1,3 +1,28 @@
-<%- include("partials/header")%>
+<%- include("partials/header") %>
 
-<%- include("partials/footer")%>
+<main>
+  <h1>Ingediende Aanvragen</h1>
+  <% if (request.length === 0) { %>
+    <p>Er zijn nog geen aanvragen ontvangen.</p>
+  <% } else { %>
+    <section class="dashboard-grid">
+      <% request.forEach(request => { %>
+        <article class="dashboard-item">
+          <h2><%= request.name %></h2>
+          <p><strong>Nummerplaat:</strong> <%= request.licensePlate %></p>
+          <p><strong>Locatie:</strong> Lat <%= request.latitude %>, Long <%= request.longitude %></p>
+          <p><strong>Tijd:</strong> <%= request.time %></p>
+          <!-- Google Maps link -->
+          <p>
+            <a
+              href="https://www.google.com/maps?q=<%= request.latitude %>,<%= request.longitude %>"
+              target="_blank"
+              rel="noopener noreferrer">Bekijk op Google Maps</a>
+          </p>
+        </article>
+      <% }) %>
+    </section>
+  <% } %>
+</main>
+
+<%- include("partials/footer") %>
