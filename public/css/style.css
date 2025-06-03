@@ -113,6 +113,9 @@ button:hover,
     background-color: #0056b3;
 }
 
+a {
+    font-style: none;
+}
 /* ========================
    HEADER & NAVIGATION
 ======================== */
@@ -204,6 +207,11 @@ footer {
     color: #fff;
     font-size: 0.9rem;
     margin-top: 2rem;
+}
+
+footer a {
+    color: white;
+    text-decoration: none;
 }
 
 /* ========================
