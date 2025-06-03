@@ -1,8 +1,8 @@
 import express from "express";
 import ejs from "ejs";
 import dotenv from "dotenv";
-import { connect, client,createInitialUser,login } from "./database";
-import { Client,User } from "./interface";
+import { connect, client, createInitialUser } from "./database";
+import { Client } from "./interface";
 import session from "./session";
 import { secureMiddleware } from "./secureMiddleware";
 import { loginRouter } from "./loginRouter";
@@ -19,18 +19,20 @@ app.set("port", 3000);
 app.use(loginRouter());
 
 // Connect to MongoDB before server starts
-connect().then(() => {
-  createInitialUser();
+connect().then(async () => {
+  await createInitialUser();
   const db = client.db("login-express");
   const requestCollection = db.collection<Client>("requests");
+
+  // ✅ TTL-index: verwijder verzoeken automatisch na 24 uur
+  await requestCollection.createIndex(
+    { time: 1 },
+    { expireAfterSeconds: 60 * 60 * 24 } // 24 uur
+  );
 
   // ROUTES
   app.get("/", (req, res) => {
     res.render("index");
-  });
-
-  app.get("/login", (req, res) => {
-    res.render("login");
   });
 
   app.get("/privacy", (req, res) => {
@@ -41,7 +43,7 @@ connect().then(() => {
     res.render("contact");
   });
 
-  app.get("/dashboard",secureMiddleware, async (req, res) => {
+  app.get("/dashboard", secureMiddleware, async (req, res) => {
     try {
       const requests = await requestCollection.find().toArray();
       res.render("dashboard", { request: requests });
@@ -59,7 +61,7 @@ connect().then(() => {
       licensePlate,
       latitude,
       longitude,
-      time: new Date(),
+      time: new Date(), // ⚠️ belangrijk voor TTL
     };
 
     try {
@@ -76,27 +78,7 @@ connect().then(() => {
     }
   });
 
-// Login route
-app.post("/login", async (req, res) => {
-  const email: string = req.body.email;
-  const password: string = req.body.password;
-  try {
-    let user: User = await login(email, password);
-    delete user.password;
-    req.session.user = user;
-    res.redirect("/");
-  } catch (e: any) {
-    res.redirect("/login");
-  }
-});
-
-// Logout 
-app.post("/logout", async(req, res) => {
-    req.session.destroy(() => {
-        res.redirect("/login");
-    });
-});
-  // Fallback route
+  // 404 fallback
   app.use((req, res) => {
     res.type("text/html");
     res.status(404).send("404 - Niet gevonden");
