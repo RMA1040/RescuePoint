@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
-dotenv.config(); 
+dotenv.config();
+console.log("Using MONGODB_URI:", process.env.MONGODB_URI);
 import express from "express";
 import ejs from "ejs";
 import { connect, client, createInitialUser } from "./database";
