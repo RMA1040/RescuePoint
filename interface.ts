@@ -1,6 +1,7 @@
 import { ObjectId } from "mongodb";
 
 export interface Client{
+    _id?: ObjectId; // Optioneel, want bij creatie heb je dit nog niet
     name:string;
     licensePlate: string;
     latitude?: string;

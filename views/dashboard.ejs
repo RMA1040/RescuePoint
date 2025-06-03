@@ -1,6 +1,9 @@
 <%- include("partials/header") %>
 
 <main>
+  <form action="/logout" method="post">
+        <button type="submit">Logout</button>
+    </form>
   <h1>Ingediende Aanvragen</h1>
   <% if (request.length === 0) { %>
     <p>Er zijn nog geen aanvragen ontvangen.</p>

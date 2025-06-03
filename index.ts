@@ -1,16 +1,22 @@
 import express from "express";
 import ejs from "ejs";
 import dotenv from "dotenv";
-import { connect, client,createInitialUser } from "./database";
-import { Client } from "./interface";
+import { connect, client,createInitialUser,login } from "./database";
+import { Client,User } from "./interface";
+import session from "./session";
+import { secureMiddleware } from "./secureMiddleware";
+import { loginRouter } from "./loginRouter";
 
 dotenv.config();
 
 const app = express();
 app.set("view engine", "ejs");
+app.use(session);
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.set("port", 3000);
+
+app.use(loginRouter());
 
 // Connect to MongoDB before server starts
 connect().then(() => {
@@ -35,7 +41,7 @@ connect().then(() => {
     res.render("contact");
   });
 
-  app.get("/dashboard", async (req, res) => {
+  app.get("/dashboard",secureMiddleware, async (req, res) => {
     try {
       const requests = await requestCollection.find().toArray();
       res.render("dashboard", { request: requests });
@@ -70,6 +76,26 @@ connect().then(() => {
     }
   });
 
+// Login route
+app.post("/login", async (req, res) => {
+  const email: string = req.body.email;
+  const password: string = req.body.password;
+  try {
+    let user: User = await login(email, password);
+    delete user.password;
+    req.session.user = user;
+    res.redirect("/");
+  } catch (e: any) {
+    res.redirect("/login");
+  }
+});
+
+// Logout 
+app.post("/logout", async(req, res) => {
+    req.session.destroy(() => {
+        res.redirect("/login");
+    });
+});
   // Fallback route
   app.use((req, res) => {
     res.type("text/html");
