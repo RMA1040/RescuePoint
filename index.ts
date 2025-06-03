@@ -1,58 +1,82 @@
 import express from "express";
 import ejs from "ejs";
-import {Client} from "./interface";
-import { request } from "http";
+import dotenv from "dotenv";
+import { connect, client,createInitialUser } from "./database";
+import { Client } from "./interface";
+
+dotenv.config();
 
 const app = express();
-const helpRequest: Client[] = []; // lege array om alle aanvragen type Client in op te slaan 
-
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.set("port", 3000);
 
-// ROUTE HANDLING
-app.get("/", (req,res) =>{
+// Connect to MongoDB before server starts
+connect().then(() => {
+  createInitialUser();
+  const db = client.db("login-express");
+  const requestCollection = db.collection<Client>("requests");
+
+  // ROUTES
+  app.get("/", (req, res) => {
     res.render("index");
-});
+  });
 
-app.get("/login", (req,res) =>{
+  app.get("/login", (req, res) => {
     res.render("login");
-});
+  });
 
-app.get("/privacy", (req,res) =>{
+  app.get("/privacy", (req, res) => {
     res.render("privacy");
-});
+  });
 
-app.get("/contact", (req,res)=>{
+  app.get("/contact", (req, res) => {
     res.render("contact");
-});
+  });
 
-app.get("/dashboard", (req, res) => {
-  res.render("dashboard", { request: helpRequest });
-});
-
-app.post("/request", (req, res) => {
-  const { name, licensePlate, latitude, longitude } = req.body;
-
-  const request: Client = {
-    name,
-    licensePlate,
-    latitude,
-    longitude,
-    time: new Date()
-  };
-
-  helpRequest.push(request); // voegt "request" objecten toe aan het einde van de array helpRequest.
-
-  res.render("confirmation", { name, licensePlate, latitude, longitude });
-});
-
-app.use((req, res) => {
-    res.type("text/html");
-    res.status(404);
-    res.send("404 - Not Found");
+  app.get("/dashboard", async (req, res) => {
+    try {
+      const requests = await requestCollection.find().toArray();
+      res.render("dashboard", { request: requests });
+    } catch (error) {
+      console.error("Fout bij ophalen van verzoeken:", error);
+      res.status(500).send("Interne serverfout");
     }
-);
+  });
 
-app.listen(app.get("port"), ()=>console.log( "[server] http://localhost:" + app.get("port")));
+  app.post("/request", async (req, res) => {
+    const { name, licensePlate, latitude, longitude } = req.body;
+
+    const newRequest: Client = {
+      name,
+      licensePlate,
+      latitude,
+      longitude,
+      time: new Date(),
+    };
+
+    try {
+      await requestCollection.insertOne(newRequest);
+      res.render("confirmation", {
+        name: newRequest.name,
+        licensePlate: newRequest.licensePlate,
+        latitude: newRequest.latitude,
+        longitude: newRequest.longitude,
+      });
+    } catch (error) {
+      console.error("Fout bij opslaan van aanvraag:", error);
+      res.status(500).send("Er ging iets mis bij het opslaan van je aanvraag.");
+    }
+  });
+
+  // Fallback route
+  app.use((req, res) => {
+    res.type("text/html");
+    res.status(404).send("404 - Niet gevonden");
+  });
+
+  app.listen(app.get("port"), () =>
+    console.log("[server] http://localhost:" + app.get("port"))
+  );
+});
