@@ -1,6 +1,8 @@
 RescuePoint Webapplicatie
 ==========================
 
+https://rescuepoint.cloud/
+
 Beschrijving:
 -------------
 RescuePoint is een eenvoudige Node.js/Express-webapplicatie die hulpaanvragen verzamelt en beheert via een dashboard. Gebruikers kunnen hun naam, nummerplaat en locatie indienen, waarna een bevestigingsscherm verschijnt. Admin-gebruikers kunnen ingelogd op het dashboard de ingediende hulpverzoeken bekijken. Verzoeken worden automatisch verwijderd na 24 uur.
@@ -50,5 +52,6 @@ Beveiliging:
 
 Auteur:
 -------
+Raymond Maetha
 Gemaakt voor een intern project of demo-doeleinden.
 
