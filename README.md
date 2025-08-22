@@ -24,16 +24,6 @@ Technologieën:
 - EJS templating engine
 - express-session + connect-mongodb-session voor sessiebeheer
 
-Installatie:
-------------
-1. Clone deze repository
-2. Installeer dependencies met `npm install`
-3. Maak een `.env` bestand met:
-   - `MONGODB_URI=your_mongodb_connection_string`
-   - `SESSION_SECRET=your_session_secret`
-4. Start de server met `npm start`
-5. Open http://localhost:3000 in je browser
-
 Mappenstructuur:
 ----------------
 - `index.ts`        → startpunt van de applicatie
